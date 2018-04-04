@@ -34,39 +34,49 @@
 (defconst ql-interface "net.sacredchao.QuodLibet")
 
 (defun ql-call* (method &rest args)
+  "Helper function to invoke QL function METHOD via D-Bus, with ARGS."
   (apply #'dbus-call-method :session ql-service ql-path ql-interface
          method args))
 
 (defun ql-status ()
+  "Display the status of Quod Libet in the echo area."
   (let ((song (ql-call* "CurrentSong")))
-    (message (format "%s - %s"
-                     (cadr (assoc "artist" song))
-                     (cadr (assoc "title" song))))))
+    (if (ql-playingp*)
+        (message (format "Playing: %s - %s"
+                         (cadr (assoc "artist" song))
+                         (cadr (assoc "title" song))))
+      (message "Paused"))))
 
 (defun ql-playingp* ()
+  "Return t if Quod Libet is playing a song, nil otherwise."
   (ql-call* "IsPlaying"))
 
 (defun ql-play-pause ()
+  "Toggle playing status."
   (interactive)
   (ql-call* "PlayPause")
   (when (ql-playingp*)
     (ql-status)))
 
 (defun ql-pause ()
+  "Pause the current song."
   (interactive)
   (ql-call* "Pause"))
 
 (defun ql-play ()
+  "Begin playing."
   (interactive)
   (ql-call* "Play")
   (ql-status))
 
 (defun ql-next ()
+  "Skip to the next track."
   (interactive)
   (ql-call* "Next")
   (ql-status))
 
-(defun ql-next ()
+(defun ql-previous ()
+  "Skip backwards to the previous track."
   (interactive)
   (ql-call* "Previous")
   (ql-status))
