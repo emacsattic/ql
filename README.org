@@ -1,0 +1,23 @@
+* Control Quod Libet from Emacs
+
+This is some support code and a global minor-mode for controlling Quod
+Libet from inside Emacs using D-Bus.
+
+** Installation
+
+Get it from MELPA, or open =ql.el= and run =M-x package-install-from-buffer=.
+
+** Usage
+
+#+BEGIN_SRC emacs-lisp -n -r
+(require 'ql)
+(ql-minor-mode 1)
+#+END_SRC
+
+** Bindings
+
+- =XF86AudioPlay= - toggle play/pause.
+- =XF86AudioNext= - Skip to next track.
+- =XF86AudioPrev= - Skip to previous track.
+
+You can add or change bindings in =ql-minor-mode-map=.
